@@ -1,0 +1,17 @@
+extensions:
+    psr11: Contributte\Psr11\DI\Psr11ContainerExtension
+
+services:
+	- App\Presentation\API\AppFactory
+	-
+		factory: @App\Presentation\Api\AppFactory::create
+		type: Slim\App
+
+	apiRouter:
+		class: App\Presentation\API\MainRouter
+		arguments:
+			routers: typed(App\Presentation\Api\Router)
+
+includes:
+    - config.global.neon
+    - ./../Hello/config/config.neon

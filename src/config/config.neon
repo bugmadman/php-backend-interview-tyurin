@@ -1,0 +1,20 @@
+includes:
+    - doctrine.neon
+    - ./../Shared/Infrastructure/config/config.neon
+
+services:
+	- Brick\DateTime\Clock\SystemClock
+
+extensions:
+    monolog: Contributte\Monolog\DI\MonologExtension
+
+di:
+    lazy: true
+
+monolog:
+	hook:
+		toTracy: false
+	channel:
+		default:
+			handlers:
+				- Monolog\Handler\StreamHandler(php://stderr, Monolog\Logger::ERROR)

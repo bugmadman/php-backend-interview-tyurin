@@ -1,0 +1,9 @@
+*.log
+
+.DS_Store
+*.local
+
+.idea
+
+vendor
+temp

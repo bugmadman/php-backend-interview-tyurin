@@ -1,0 +1,30 @@
+#global shared services
+services:
+	- App\Presentation\Shared\Http\Json\JsonResponseFactory
+	- App\Presentation\Shared\Http\Json\JsonSerializerMiddleware
+	- Laminas\Diactoros\ResponseFactory
+	- App\Presentation\Shared\Http\Error\ErrorMiddleware
+	- App\Presentation\Shared\Http\Error\ErrorResponseFactory
+	# symfony serializer
+	- Symfony\Component\Serializer\Mapping\Loader\AttributeLoader
+	- Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory
+	symfony.dateTimeNormalizer: Symfony\Component\Serializer\Normalizer\DateTimeNormalizer
+	symfony.reflectionExtractor: Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor
+	symfony.propertyInfoExtractor:
+		type: Symfony\Component\PropertyInfo\PropertyInfoExtractor
+		arguments:
+			- []
+			- [@symfony.reflectionExtractor]
+
+	symfony.objectNormalizer:
+		type: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+		arguments:
+			propertyTypeExtractor: @symfony.propertyInfoExtractor
+
+	symfony.arrayDenormalizer: Symfony\Component\Serializer\Normalizer\ArrayDenormalizer
+	symfony.jsonEncoder: Symfony\Component\Serializer\Encoder\JsonEncoder
+	-
+		type: Symfony\Component\Serializer\Serializer
+		arguments:
+			- [@symfony.dateTimeNormalizer, @symfony.objectNormalizer, @symfony.arrayDenormalizer]
+			- [@symfony.jsonEncoder]

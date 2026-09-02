@@ -1,0 +1,37 @@
+extensions:
+    doctrine.dbal: Nettrine\DBAL\DI\DbalExtension
+    doctrine.orm: Nettrine\ORM\DI\OrmExtension
+    doctrineIdTypeExtension: App\Shared\Infrastructure\Id\DI\DoctrineIdTypeExtension(%appDir%, %tempDir%/cache/Doctrine.IdType)
+
+doctrine.dbal:
+    connections:
+        default:
+            driver: pdo_pgsql
+            host: db
+            port: 5432
+            dbname: app_db
+            user: app
+            password: app
+            charset: 'utf8'
+    types:
+        big_decimal: App\Shared\Infrastructure\Doctrine\Type\BigDecimalType
+        big_integer: App\Shared\Infrastructure\Doctrine\Type\BigIntegerType
+        instant: Brick\DateTime\Doctrine\Types\InstantType
+        local_date_time: Brick\DateTime\Doctrine\Types\LocalDateTimeType
+        local_date: Brick\DateTime\Doctrine\Types\LocalDateTimeType
+        local_time: Brick\DateTime\Doctrine\Types\LocalTimeType
+        unsigned_integer: App\Shared\Infrastructure\Doctrine\Type\UnsignedIntegerType
+        uuid: App\Shared\Infrastructure\Doctrine\Type\UuidType
+
+doctrine.orm:
+  managers:
+    default:
+      connection: default
+      lazyNativeObjects: true
+      mapping:
+        App:
+          directories: [%appDir%]
+          namespace: App
+
+services:
+    - App\Shared\Infrastructure\Doctrine\ManagerRegistry

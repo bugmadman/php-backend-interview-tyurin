@@ -1,0 +1,43 @@
+includes:
+	- ./vendor/phpstan/phpstan-doctrine/extension.neon
+	- ./vendor/phpstan/phpstan-doctrine/rules.neon
+	- ./vendor/phpstan/phpstan-strict-rules/rules.neon
+	- ./vendor/shipmonk/phpstan-rules/rules.neon
+	- ./vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+rules:
+	- PHPStan\Rules\Playground\MethodNeverRule
+
+parameters:
+	parallel:
+		maximumNumberOfProcesses: 4
+		processTimeout: 1200.0
+		jobSize: 50
+	level: 8
+	paths:
+		- ../app
+		- ../database
+		- ../tests
+	excludePaths:
+		- ../temp/cache/latte/* #Undefined variable: $xyz
+
+	strictRules:
+		strictArrayFilter: true
+	exceptions:
+		implicitThrows: false
+		checkedExceptionClasses:
+			- App\Shared\Domain\Exception\RuntimeException
+		check:
+			missingCheckedExceptionInThrows: true
+			tooWideThrowType: true
+
+	inferPrivatePropertyTypeFromConstructor: true
+	reportUnmatchedIgnoredErrors: false
+	propertyAlwaysWrittenTags:
+		- '@@readonly' #some entity properties are filled only in DB
+	shipmonkRules:
+		enableAllRules: false
+		forbidCheckedExceptionInCallable:
+			allowedCheckedExceptionCallables:
+				'Doctrine\ORM\EntityManagerInterface::wrapInTransaction': [0]
+			enabled: true

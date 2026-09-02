@@ -7,3 +7,5 @@
 
 vendor
 temp
+
+.phpunit.result.cache

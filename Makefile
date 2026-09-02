@@ -30,6 +30,10 @@ phpcs-fix:
 phpstan:
 	$(exec-app) vendor/bin/phpstan analyse --memory-limit=8G $(or ${args},src tests database)
 
+.PHONY: test
+test:
+	$(exec-app) vendor/bin/phpunit $(args)
+
 wait-db:
 	docker compose exec -T db bash -lc 'until pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB >/dev/null 2>&1; do sleep 1; done'
 

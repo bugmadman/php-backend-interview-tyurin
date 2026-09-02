@@ -36,6 +36,7 @@
     "phpstan/phpstan": "^2.1",
     "phpstan/phpstan-doctrine": "^2.0",
     "phpstan/phpstan-strict-rules": "^2.0",
+    "phpunit/phpunit": "^12.5",
     "shipmonk/phpstan-rules": "^4.3",
     "slevomat/coding-standard": "^8.26",
     "squizlabs/php_codesniffer": "*"
@@ -67,7 +68,7 @@
   ],
   "scripts": {
     "dev": "php -S 0.0.0.0:8000 -t public",
-    "test": "vendor/bin/tester -C tests",
+    "test": "vendor/bin/phpunit",
     "db:reset": "bash ./scripts/db-reset.sh"
   }
 }

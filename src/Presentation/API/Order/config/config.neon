@@ -1,0 +1,5 @@
+services:
+	- App\Presentation\API\Order\CreateOrder\CreateOrderHandler
+	- App\Presentation\API\Order\OrderRouter
+	- App\Customer\Infrastructure\Doctrine\CustomerRepository
+	- App\Product\Infrastructure\Doctrine\ProductRepository

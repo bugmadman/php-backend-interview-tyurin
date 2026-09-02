@@ -2,6 +2,8 @@
 
 namespace App\Presentation\Shared\Http\Json;
 
+use App\Presentation\Shared\Http\Error\ErrorResponseFactory;
+use App\Presentation\Shared\Http\StatusCode;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -10,12 +12,14 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Routing\Route;
 use Slim\Routing\RouteContext;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 final readonly class JsonSerializerMiddleware implements MiddlewareInterface
 {
 	public function __construct(
 		private SerializerInterface $serializer,
+		private ErrorResponseFactory $errorResponseFactory,
 	) {
 	}
 
@@ -41,11 +45,16 @@ final readonly class JsonSerializerMiddleware implements MiddlewareInterface
 
 		/** @var class-string<JsonRequestWithParsedBodyHandler> $requestHandler */
 		$parsedBodyClassName = $requestHandler::getParsedBodyClassName();
-		$parsedBody = $this->serializer->deserialize(
-			(string)$request->getBody(),
-			$parsedBodyClassName,
-			JsonEncoder::FORMAT,
-		);
+
+		try {
+			$parsedBody = $this->serializer->deserialize(
+				(string)$request->getBody(),
+				$parsedBodyClassName,
+				JsonEncoder::FORMAT,
+			);
+		} catch (ExceptionInterface) {
+			return $this->errorResponseFactory->createErrorResponse(StatusCode::BAD_REQUEST, 'INVALID_JSON', []);
+		}
 
 		return $handler->handle($request->withParsedBody($parsedBody));
 	}

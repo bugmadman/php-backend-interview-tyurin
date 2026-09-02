@@ -16,9 +16,12 @@ services:
 			- []
 			- [@symfony.reflectionExtractor]
 
+	symfony.nameConverter: Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter
+
 	symfony.objectNormalizer:
 		type: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
 		arguments:
+			nameConverter: @symfony.nameConverter
 			propertyTypeExtractor: @symfony.propertyInfoExtractor
 
 	symfony.arrayDenormalizer: Symfony\Component\Serializer\Normalizer\ArrayDenormalizer

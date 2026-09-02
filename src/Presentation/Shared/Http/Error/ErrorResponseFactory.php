@@ -23,4 +23,20 @@ final readonly class ErrorResponseFactory
 	): ResponseInterface {
 		return $this->jsonResponseFactory->create(new ErrorResponse($code, $errors), $httpStatus);
 	}
+
+	/**
+	 * @param array<string, mixed> $errors
+	 */
+	public function createUnprocessableEntity(string $code, array $errors = []): ResponseInterface
+	{
+		return $this->createErrorResponse(StatusCode::UNPROCESSABLE_ENTITY, $code, $errors);
+	}
+
+	/**
+	 * @param array<string, mixed> $errors
+	 */
+	public function createConflict(string $code, array $errors = []): ResponseInterface
+	{
+		return $this->createErrorResponse(StatusCode::CONFLICT, $code, $errors);
+	}
 }
